@@ -48,59 +48,59 @@ window.addEventListener("scroll", function () {
 
 const sliders = document.querySelectorAll("[data-slider]");
 
-const initSlider =  function(currentSlider) {
-    const sliderContainer = currentSlider.querySelector("[data-slider-container]");
-    const sliderPrevBtn = currentSlider.querySelector("data-slider-prev");
-    const sliderNextBtn = currentSlider.querySelector("data-slider-next");
+const initSlider = function(currentSlider) {
 
-    let currentSlidePos = 0;
+  const sliderContainer = currentSlider.querySelector("[data-slider-container]");
+  const sliderPrevBtn = currentSlider.querySelector("[data-slider-prev]");
+  const sliderNextBtn = currentSlider.querySelector("[data-slider-next]");
 
-    const moveSliderItem = function() {
-        sliderContainer.style.transform = `translateX(-${sliderContainer.children[currentSlidePos].offsetLeft}px)`;
+  let currentSlidePos = 0;
+
+  const moveSliderItem = function () {
+    sliderContainer.style.transform = `translateX(-${sliderContainer.children[currentSlidePos].offsetLeft}px)`;
+  }
+
+  /**
+   * NEXT SLIDE
+   */
+
+  const slideNext = function () {
+    const slideEnd = currentSlidePos >= sliderContainer.childElementCount - 1;
+
+    if (slideEnd) {
+      currentSlidePos = 0;
+    } else {
+      currentSlidePos++;
     }
 
-    /**
-     * Next slide
-     */
+    moveSliderItem();
+  }
 
-    const slideNext = function() {
-        const slideEnd = currentSlidePos >= sliderContainer.childElementCount - 1;
+  sliderNextBtn.addEventListener("click", slideNext);
 
-        if (slideEnd) {
-            currentSlidePos = 0;
-        }
-        else {
-            currentSlidePos++;
-        }
+  /**
+   * PREVIOUS SLIDE
+   */
 
-        moveSliderItem();
+   const slidePrev = function () {
+
+    if (currentSlidePos <= 0) {
+      currentSlidePos = sliderContainer.childElementCount - 1;
+    } else {
+      currentSlidePos--;
     }
 
-    sliderNextBtn.addEventListener("click", slideNext);
+    moveSliderItem();
+  }
 
-    /**
-     * Prev slide
-     */
+  sliderPrevBtn.addEventListener("click", slidePrev);
 
-    const slidePrev = function() {
+  const dontHaveExtraItem = sliderContainer.childElementCount <= 1;
+  if (dontHaveExtraItem) {
+    sliderNextBtn.style.display = "none";
+    sliderPrevBtn.style.display = "none";
+  }
 
-        if (currentSlidePos <= 0) {
-            currentSlidePos = sliderContainer.childElementCount - 1;
-        }
-        else {
-            currentSlidePos--;
-        }
-
-        moveSliderItem();
-    }
-
-    sliderPrevBtn.addEventListener("click", slidePrev);
-
-    const dontHaveExtraItem = sliderContainer.childElementCount <= 1;
-    if (dontHaveExtraItem) {
-        sliderNextBtn.style.display = "none";
-        sliderPrevBtn.style.display = "none";
-    }
 }
 
-for (let i = 0, len = sliders.length; i < len; i++) { initSlider(sliders[i]);}
+for (let i = 0, len = sliders.length; i < len; i++) { initSlider(sliders[i]); }
